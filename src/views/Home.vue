@@ -46,7 +46,8 @@ export default defineComponent({
 .search {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   margin: auto;
 
   input:not(:last-child){
