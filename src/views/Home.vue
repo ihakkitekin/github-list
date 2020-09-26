@@ -1,18 +1,54 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <h1>Welcome</h1>
+    <h3>You can search a user's github repo by topics.</h3>
+    <form @submit="this.onSubmit" class="search">
+      <label for="username">Username</label>
+      <input name="username" type="text" v-model="username" required/>
+      <label for="topic">Topic</label>
+      <input name="topic" type="text" v-model="topic" />
+      <button>Search</button>
+    </form>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { defineComponent } from 'vue';
 
-@Options({
-  components: {
-    HelloWorld,
+export default defineComponent({
+  data() {
+    return {
+      username: '',
+      topic: '',
+    };
   },
-})
-export default class Home extends Vue {}
+  methods: {
+    onSubmit(e: Event) {
+      e.preventDefault();
+      this.$router.push(`/repos/${this.username}?topic=${this.topic}`);
+    },
+  },
+});
 </script>
+
+<style lang="scss">
+.home h1, h3 {
+  text-align: center;
+
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin: auto;
+
+  input:not(:last-child){
+    margin-bottom: 10px;
+  }
+
+  label {
+    font-weight: 600;
+  }
+}
+</style>
