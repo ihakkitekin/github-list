@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "cp -r dist static && git add . && git commit -m \"Deploying static files\" && git push"
+    "deploy": "npm run build && cp -r dist static && cd static && git add . && git commit -m \"Deploying static files\" && git push"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
