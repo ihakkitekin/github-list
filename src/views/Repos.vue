@@ -74,7 +74,7 @@ export default defineComponent({
         this.error = result.total_count === 0
           ? 'There are no repositories by this search,'
           : '';
-        this.repos = this.repos.concat(result.items);
+        this.repos = page > 1 ? this.repos.concat(result.items) : result.items;
         this.totalCount = result.total_count;
         this.currentPage = page + 1;
         this.hasMore = (result.total_count / githubSearchOptions.perPage) > page;
