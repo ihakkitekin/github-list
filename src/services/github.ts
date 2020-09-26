@@ -41,8 +41,14 @@ interface GithubRepoOwner {
 }
 
 interface GithubSearchOptions {
-  username: string;
+  username: string | null;
   topic: string | null;
+  page: number;
+  perPage: number;
+}
+
+interface GithubError {
+  error: string;
 }
 
 const githubOptions = {
@@ -52,25 +58,26 @@ const githubOptions = {
   },
 };
 
-async function getRepos(options: GithubSearchOptions): Promise<GithubApiResponse> {
+async function getRepos(options: GithubSearchOptions): Promise<GithubApiResponse | GithubError> {
   try {
-    let query = '';
-    query += `user:${options.username}`
+    let queries = [];
 
-    if (options.topic) {
-      query += `+topic:${options.topic}`
+    if (options.username) {
+      queries.push(`user:${options.username}`);
     }
 
-    const response = await axios.get<GithubApiResponse>(`/search/repositories?q=${query}`, githubOptions);
+    if (options.topic) {
+      queries.push(`topic:${options.topic}`);
+    }
+
+    const response = await axios.get<GithubApiResponse>(`/search/repositories?q=${queries.join('+')}&sort=stars&order=desc&per_page=${options.perPage}&page=${options.page}`, githubOptions);
 
     return response.data;
   } catch (error) {
     console.error('GITHUB_API_ERROR:', error);
 
     return {
-      incomplete_results: true,
-      total_count: 0,
-      items: [],
+      error: error.message,
     };
   }
 }
